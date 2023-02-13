@@ -40,8 +40,58 @@ async function recoveryLong(req, res) {
     
     res.status(404).send(resultObject.message);
 }
+
+async function redirect(req, res) {
+
+    const {shortUrl} = req.params;
+
+    let resultObject = await prisma.recoveryLong(shortUrl)
+
+    if(resultObject.success){
+
+        return res.status(200).redirect(resultObject.longUrl);
+    }
+    
+    res.status(404).send(resultObject.message);
+}
+
+async function deleteByShort(req, res) {
+
+    const {shortUrl} = req.params;
+
+    let resultObject = await prisma.deleteByShort(shortUrl)
+
+    if(resultObject.success){
+
+        return res.status(200).send(resultObject.message);
+    }
+    
+    res.status(400).send(resultObject.message);
+}
   
+async function deleteByLong(req, res) {
+
+    const longUrl = req.body.longUrl;
+
+    if (!longUrl.includes("http://") && !longUrl.includes("https://")) {
+        
+        res.status(400).send("URL larga no válida. Debe tener presente prefijo http://");
+    }
+
+    let resultObject = await prisma.deleteByLong(longUrl)
+
+    if(resultObject.success){
+
+        return res.status(200).send(resultObject.message);
+    }
+    
+    res.status(400).send(resultObject.message);
+}
+
 module.exports = {
     createShort,
-    recoveryLong
+    recoveryLong,
+    redirect,
+    deleteByShort,
+    deleteByLong
 };

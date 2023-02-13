@@ -10,26 +10,28 @@ async function create(parameter){
         data:{
             longUrl: parameter.longUrl,
             shortUrl: parameter.shortUrl,
-            delete: false
+            delete: false,
+            deletedAt: null
         }
      });
 }
 
-async function recoveryLong(shortUrl){
+async function recoveryLong(_shortUrl){
 
-    shortUrl = `${process.env.DOMAIN}/${shortUrl}`
+    shortUrl = `${process.env.DOMAIN}/${_shortUrl}`
 
-    let urlObj = await prisma.urlModel.findFirst({
+    const urlObj = await prisma.urlModel.findFirst({
         where: {
           shortUrl: shortUrl,
           delete: false,
         }
     });
 
-    let resultObj = {
-        success: false,
-        longUrl: '',
-        message: ''
+    const resultObj = {
+            id: null,
+            success: false,
+            longUrl: '',
+            message: ''
     }
 
     if(urlObj === null){
@@ -38,14 +40,70 @@ async function recoveryLong(shortUrl){
 
         return resultObj;
     }
-    
+
+    resultObj.id = urlObj.id,
     resultObj.success = true;
     resultObj.longUrl = urlObj.longUrl;
+
+    console.log(resultObj);
+
+    return resultObj;
+}
+
+async function deleteByShort(_shortUrl){
+
+    const resultObj = await recoveryLong(_shortUrl);
+    
+    if(!resultObj.success){
+
+        return resultObj;
+    }
+    
+    shortUrl = `${process.env.DOMAIN}/${_shortUrl}`
+
+    const urlObj = await prisma.urlModel.update({
+        where: {
+            id: resultObj.id
+        },
+        data: {
+            delete: true,
+            deletedAt: new Date()
+        }
+    });
+
+    resultObj.success = urlObj != null;
+    resultObj.longUrl = urlObj.longUrl;
+    resultObj.message = urlObj == null? 'Error al actualizar objeto' : '1 documento actualizado';
+
+    return resultObj;
+}
+
+async function deleteByLong(_longUrl){
+
+    const urlObj = await prisma.urlModel.updateMany({
+        where: {
+            longUrl: _longUrl,
+            delete: false
+        },
+        data: {
+            delete: true,
+            deletedAt: new Date()
+        }
+    });
+
+    const resultObj = {
+        id: null,
+        success: true,
+        longUrl: '',
+        message: `${urlObj.count} documento(s) actualizado(s)`
+    }
 
     return resultObj;
 }
 
 module.exports = {
     create,
-    recoveryLong
+    recoveryLong,
+    deleteByShort,
+    deleteByLong
 };

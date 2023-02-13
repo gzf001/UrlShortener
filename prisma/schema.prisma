@@ -16,6 +16,5 @@ model UrlModel{
   shortUrl      String
   delete        Boolean
   creationDate  DateTime @default(now())
-  updateAt      DateTime?
   deletedAt     DateTime?
 }
