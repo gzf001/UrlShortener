@@ -18,3 +18,11 @@ model UrlModel{
   creationDate  DateTime @default(now())
   deletedAt     DateTime?
 }
+
+model StatisticsModel{
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  longUrl       String
+  shortUrl      String
+  success       Boolean
+  creationDate  DateTime @default(now())
+}

@@ -17,7 +17,7 @@ async function createShort(req, res) {
 
     const shortUrl = `${domain}/${id}`;
 
-    let parameter = {
+    const parameter = {
         longUrl: req.body.longUrl,
         shortUrl: shortUrl
     }
@@ -45,10 +45,20 @@ async function redirect(req, res) {
 
     const {shortUrl} = req.params;
 
-    let resultObject = await prisma.recoveryLong(shortUrl)
+    const resultObject = await prisma.recoveryLong(shortUrl)
+
+    const parameter = {
+        longUrl: resultObject.success? resultObject.longUrl : '',
+        shortUrl: shortUrl,
+        success: resultObject.success
+    }
+
+    await prisma.recordStatistics(parameter);
 
     if(resultObject.success){
 
+        await prisma.recordStatistics(parameter);
+        
         return res.status(200).redirect(resultObject.longUrl);
     }
     
@@ -59,7 +69,7 @@ async function deleteByShort(req, res) {
 
     const {shortUrl} = req.params;
 
-    let resultObject = await prisma.deleteByShort(shortUrl)
+    const resultObject = await prisma.deleteByShort(shortUrl)
 
     if(resultObject.success){
 
@@ -78,7 +88,7 @@ async function deleteByLong(req, res) {
         res.status(400).send("URL larga no válida. Debe tener presente prefijo http://");
     }
 
-    let resultObject = await prisma.deleteByLong(longUrl)
+    const resultObject = await prisma.deleteByLong(longUrl)
 
     if(resultObject.success){
 
