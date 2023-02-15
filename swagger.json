@@ -1,0 +1,82 @@
+{
+    "openapi": "3.0.0",
+    "info":{
+        "title": "UrlShortener API",
+        "version": "1.0.3"
+    },
+    "servers":[
+        {
+            "url":"http://localhost:8080"
+        }
+    ],
+    "paths":{
+        "/":{
+            "post":{
+                "summary":"Creación de URL corta",
+                "description": "Permiter crear un texto que permittirá redirigir a una URL larga",
+                "tags": ["Short URL"],
+                "requestBody":{
+                    "content":{
+                        "application/json":{
+                            "schema":{
+                                "$ref":"#/components/schemas/UrlModel"
+                            },
+                            "examples":{
+                                "UrlModel":{
+                                    "value":{
+                                        "longUrl":"https://eletronicos.mercadolivre.com.br/seguranca-casa/#menu=categories"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "400":{
+                        "description":"URL larga no válida. Debe tener presente prefijo http://"
+                    },
+                    "200": {
+                        "description":"OK",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "object",
+                                    "items":{
+                                        "$ref":"#/components/schemas/UrlModel"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components":{
+        "schemas":{
+                "UrlModel":{
+                    "type":"object",
+                    "properties":{
+                        "id":{
+                            "type":"object"
+                        },
+                        "longUrl":{
+                            "type":"String"
+                        },
+                        "shortUrl":{
+                            "type":"String"
+                        },
+                        "delete":{
+                            "type":"bool"
+                        },
+                        "creationDate":{
+                            "type":"DateTime"
+                        },
+                        "deletedAt":{
+                            "type":"DateTime"
+                        }
+                    }
+                }
+        }
+    }
+}

@@ -14,6 +14,10 @@
     "@prisma/client": "^4.10.1",
     "express": "^4.18.2",
     "nanoid": "3.3.4",
-    "prisma": "^4.10.1"
+    "prisma": "^4.10.1",
+    "redis": "^4.6.4",
+    "swagger": "^0.7.5",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^4.6.0"
   }
 }
