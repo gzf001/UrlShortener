@@ -13,8 +13,8 @@ router.get("/longUrl/:shortUrl", urlShortenerController.recoveryLong);
 
 router.get("/:shortUrl", urlShortenerController.redirect);
 
-router.get("/deleteByShort/:shortUrl", urlShortenerController.deleteByShort);
+router.delete("/deleteByShort/:shortUrl", urlShortenerController.deleteByShort);
 
-router.post("/deleteByLong", urlShortenerController.deleteByLong);
+router.delete("/deleteByLong", urlShortenerController.deleteByLong);
   
 module.exports = router;

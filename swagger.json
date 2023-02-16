@@ -50,6 +50,129 @@
                     }
                 }
             }
+        },
+        "/longUrl/{shortUrl}":{
+            "get":{
+                "summary":"Obtención de una URL larga",
+                "description": "Permite obtener a una URL larga a partir de una URL corta",
+                "tags": ["Long URL by short URL"],
+                "parameters": [
+                    {
+                      "name": "shortUrl",
+                      "in": "path",
+                      "description": "shortUrl",
+                      "required": false,
+                      "schema": {
+                        "type": "String",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "style": "simple"
+                    }
+                  ],
+                  "responses":{
+                    "404":{
+                        "description":"URL corta no existe"
+                    },
+                    "200": {
+                        "description":"OK",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "string",
+                                    "items":{
+                                        "$ref":"#/components/schemas/ShortModel"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/deleteByShort/{shortUrl}":{
+            "delete":{
+                "summary":"Elimina una URL corta",
+                "description": "Permite eliminar una URL corta",
+                "tags": ["Delete short URL"],
+                "parameters": [
+                    {
+                      "name": "shortUrl",
+                      "in": "path",
+                      "description": "shortUrl",
+                      "required": false,
+                      "schema": {
+                        "type": "String",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "style": "simple"
+                    }
+                  ],
+                  "responses":{
+                    "400":{
+                        "description":"Error al actualizar objeto"
+                    },
+                    "200": {
+                        "description":"OK",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "string",
+                                    "items":{
+                                        "$ref":"#/components/schemas/ShortModel"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+        },
+        "/deleteByLong":{
+            "delete":{
+                "summary":"Elimina muchas URL corta",
+                "description": "Permite eliminar muchas URL'S cortas, en función de una URL larga",
+                "tags": ["Delete short URL by long URL"],
+                "requestBody":{
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "$ref":"#/components/schemas/LongModel"
+                                },
+                                "examples":{
+                                    "UrlModel":{
+                                        "value":{
+                                            "longUrl":"https://eletronicos.mercadolivre.com.br/seguranca-casa/#menu=categories"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                  "responses":{
+                    "400":{
+                        "description":"Error al actualizar objeto"
+                    },
+                    "200": {
+                        "description":"OK",
+                        "content":{
+                            "application/json":{
+                                "schema":{
+                                    "type": "string",
+                                    "items":{
+                                        "$ref":"#/components/schemas/LongModel"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
         }
     },
     "components":{
@@ -74,6 +197,22 @@
                         },
                         "deletedAt":{
                             "type":"DateTime"
+                        }
+                    }
+                },
+                "ShortModel":{
+                    "type":"object",
+                    "properties":{
+                        "shortUrl":{
+                            "type":"String"
+                        }
+                    }
+                },
+                "LongModel":{
+                    "type":"object",
+                    "properties":{
+                        "longUrl":{
+                            "type":"String"
                         }
                     }
                 }
