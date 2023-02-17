@@ -9,7 +9,10 @@
             "url":"http://localhost:8080"
         },
         {
-            "url":"https://shortenurlgzf001.azurewebsites.net/"
+            "url":"https://shortenurlgzf001.azurewebsites.net"
+        },
+        {
+            "url":"http://44.197.188.249"
         }
     ],
     "paths":{

@@ -2,6 +2,14 @@ const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
+const {
+    cacheClient,
+    queue,
+    isRedisCacheUp,
+    isRedisQueueUp,
+  } = require("./redis");
+
+
 async function create(parameter){
 
     try{
